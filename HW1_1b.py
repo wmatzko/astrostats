@@ -10,6 +10,7 @@ from matplotlib.offsetbox import AnchoredText as AT #to add fancy box of statist
 np.random.seed(42) #set random seed to generate same random data
 
 #take same code from part a...don't know the point in splitting the scripts up...
+# Easier to share and grade, but correct, bad style.
 
 mu = 0 #mean of Gaussian
 sig = 1 #standard deviation of Gaussian
@@ -38,7 +39,7 @@ plt.ylabel('Frequency', size = 18)
 txt = "$\mu = {0:0.2f}$\n$\sigma = {1:0.2f}$\n$\\overline{{X}}_{{\\mathrm{{dist}}}} = {2:0.2f}$\n$\\overline{{s}} = {3:0.2f}$\n$\\mathrm{{min}} = {4:0.2f}$\n$\\mathrm{{max}} = {5:0.2f}$\n$\\mathrm{{n}} = {6}$\n$\\mathrm{{niter}} = {7}$"\
 .format(mu, sig, np.mean(avgs), np.std(avgs), min(avgs), max(avgs), n, niter)
 pt = AT(txt, loc = 'upper left')
-ax = plt.subplot(1,1,1) #Apparently this method will be depricated soon...not sure how else to add the label?
+ax = plt.gca() #Apparently this method will be depricated soon...not sure how else to add the label?
 ax.add_artist(pt)
 plt.grid()
 plt.show()
