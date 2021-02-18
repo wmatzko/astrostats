@@ -14,15 +14,17 @@ np.random.seed(42) #set random seed to generate same random data
 mu = 0 #mean of Gaussian
 sig = 1 #standard deviation of Gaussian
 
-n = 100 #number of samples
+n = 10 #number of samples
 niter = 10000 #number of iterations in for loop
 nbin = 50 #number of bins in histogram
 
 avgs = [] #hold the averages
+stds = []
 for i in range(niter): #compute averages for however many iterations
     x = np.random.normal(mu, sig, size = n) #generate set of random numbers of size n from Gaussian dist.
     x_avg = np.average(x) #compute average
     avgs.append(x_avg) #add to list
+    stds.append(np.std(x))
 
 bins = np.linspace(min(avgs), max(avgs), nbin+1) #make bins
 
@@ -40,6 +42,16 @@ ax = plt.subplot(1,1,1) #Apparently this method will be depricated soon...not su
 ax.add_artist(pt)
 plt.grid()
 plt.show()
+
+plt.figure()
+bins = np.linspace(min(stds), max(stds), nbin+1) #make bins
+plt.title('Std Dev Dist.')
+plt.hist(stds, bins)
+plt.xlabel('Trial Averages')
+plt.ylabel('Frequency')
+plt.grid()
+plt.show()
+
 
 #how many of avgs were in range +- 0.01?
 
