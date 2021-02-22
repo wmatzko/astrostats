@@ -10,10 +10,19 @@ ntrial = 100000 #number of simulations want to run, should be at least 10000
 
 ca,cb,cc,cd = 0,0,0,0 #initialize counters for parts a - d
 
+# Put outside of loop b/c this does not change.
+
 for i in range(ntrial):
     x = [40,40,40,40, 60, 60, 60, 60, 60, 75, 75, 75, 75,75, 75] #make list of all bulbs. Need at start because of x.remove later
     el = np.random.choice(x, 3, replace=False) #choose three from list at random
     #e75 = len([i for i in el if i == 75]) #are there two 75's in the choice?
+
+    # I think MATLAB's syntax is so much easier/clearer:
+    # >> e75 = length(find(el == 75))
+    # I'm not even sure that the find is needed. I'm still looking for the
+    # best way to do the following in Python, which seems to be the way most
+    # do it.
+
     e75 = len(el[np.where(el==75)]) #different way 
     if e75 == 2:
         ca += 1 #if so, add to the count
