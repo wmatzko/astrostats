@@ -41,3 +41,7 @@ plt.xlabel('$\\theta$', size = 18)
 plt.ylabel('P($\\theta|D)$', size = 18)
 plt.grid()
 plt.show()
+
+# It is nice to see people take care to modify plots from the defaults as you
+# have done here. The next level is for you would be to use fonts in the plot
+# that match those in your write-up. I usually use Times New Roman.
