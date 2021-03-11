@@ -13,7 +13,7 @@ np.random.seed(42)
 N_exp = 10000                                            #number of experiments
 N = 100                                                  #number of trials in each experiment
 k_arr = np.linspace(0,N,N+1)                             #number of successes
-n = len(k_arr)                                           
+n = len(k_arr)
 p = 0.4                                                  #success rate
 
 Pk_true_arr = np.nan*np.zeros(n)                         #Store Pk
@@ -26,7 +26,7 @@ Pk_exp_arr2 = np.nan*np.zeros(n)
 for i in range(n):                              #compute Pk with the formula for given k
     Pk_true = comb(N,k_arr[i]) * p**k_arr[i] * (1-p)**(N-k_arr[i])
     Pk_true_arr[i] = Pk_true
-    
+
 for i in range(N_exp):                                   #Simulate 10,000 experiments
     pk_i = np.random.random(N)                           #generate random number between 0-1
     mask = np.where(pk_i <= p)                           #find which elements are successes
@@ -34,8 +34,8 @@ for i in range(N_exp):                                   #Simulate 10,000 experi
     exp_success_arr[i] = N_success
 
 
-        
-for i in range(N_exp):       
+
+for i in range(N_exp):
     p = 0.4                            #Trials for variable p
     for j in range(n):                                   #Trials done one at a time, don't know bette way
         pk_j = np.random.random(1)
@@ -51,9 +51,9 @@ for i in range(N_exp):
         mask = np.where(pk_j <= p)
         N_success = len(pk_j[mask])
         exp_success_arr2[i][j] = N_success
-        
-exp_count = Counter(exp_success_arr)                     #Count number of successes 
-exp_count2 = Counter(np.sum(exp_success_arr2, axis = 1)) 
+
+exp_count = Counter(exp_success_arr)                     #Count number of successes
+exp_count2 = Counter(np.sum(exp_success_arr2, axis = 1))
 
 for i in range(len(k_arr)):                              #loop through counter dict
     if k_arr[i] in exp_count.keys():
@@ -64,13 +64,14 @@ for i in range(len(k_arr)):                              #loop through counter d
         Pk_exp_arr2[i] = exp_count2[k_arr[i]]/N_exp
     else:
         Pk_exp_arr2[i] = 0
-    
-    
+
+
 plt.figure(figsize = (12,14))                            #plot results
 plt.title('Bernoulli Trials', size = 24)
-plt.plot(k_arr, Pk_true_arr, marker = 'o', linestyle = '--', color = 'r', label = 'Formula')
-plt.plot(k_arr, Pk_exp_arr, marker = 'o', linestyle = '--', color = 'b', label = 'RNG')
-plt.plot(k_arr, Pk_exp_arr2, marker = 'o', linestyle = '--', color = 'g', label = 'Variable P')
+# Style-wise, I think step is a more accurate representation of the data
+plt.step(k_arr, Pk_true_arr, where='mid', marker = 'o', linestyle = '--', color = 'r', label = 'Formula')
+plt.step(k_arr, Pk_exp_arr, where='mid', marker = 'o', linestyle = '--', color = 'b', label = 'RNG')
+plt.step(k_arr, Pk_exp_arr2, where='mid', marker = 'o', linestyle = '--', color = 'g', label = 'Variable P')
 plt.xlabel('k', size = 18)
 plt.ylabel('P(k)', size = 18)
 plt.grid()

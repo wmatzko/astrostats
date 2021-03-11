@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from collections import Counter
 np.random.seed(42)
 
-#please see HW4_3.pdf for explanation of the logic behind this code. 
+#please see HW4_3.pdf for explanation of the logic behind this code.
 
 def cz(x):
     '''
@@ -84,13 +84,13 @@ tbf = []                                                     #hold time between 
 for i in range(1):
     #day_block = t_arr[i]
     #day_chain = np.ndarray.flatten(np.array(day_block))     #flatten each hour long sub-block into one long block
-    
+
     chain = np.ndarray.flatten(np.array(t_arr))
     times = cz(chain)
     if len(times) > 0:
         for j in times:                                      #Add to list on element-by-element basis
             tbf.append(j/60) #convert to hours
-    
+
 #make figures
 spath = 'c:/users/william/desktop/astrostats/'              #set local savepath
 plt.figure(figsize = (12,14))
@@ -101,9 +101,9 @@ plt.xlabel('k', size = 18)
 plt.ylabel('P(k)', size = 18)
 plt.legend()
 plt.grid()
-plt.savefig(spath + 'HW4_3_1_fig.pdf', dpi = 500)
+#plt.savefig(spath + 'HW4_3_1_fig.pdf', dpi = 500)
 #plt.show()
-         
+
 plt.figure(figsize = (12,14))
 plt.title('Time Between Flares',size = 24)
 bins = np.linspace(0, max(tbf), n_bin + 1)
@@ -111,7 +111,7 @@ plt.hist(tbf, bins = bins, color = 'k', rwidth = 0.8)
 plt.xlabel('Time (Hours)', size = 18)
 plt.ylabel('Frequency', size = 18)
 plt.xticks(bins, rotation = 90)
-plt.savefig(spath + 'HW4_3_2_fig.pdf', dpi = 500)
+#plt.savefig(spath + 'HW4_3_2_fig.pdf', dpi = 500)
 #plt.show()
 
 
