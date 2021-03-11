@@ -1,0 +1,10 @@
+The file xray.txt contains five columns
+Year Month Day Hour Minute
+that correspond to the start time of a solar flare.
+
+xray.txt was created by prep.m, which parses the files xray200*
+obtained from NOAA/NGDC.
+
+The file compute.m creates an array with elements of number of events
+per day. If using IDL, you will need to create a function that does
+this.
