@@ -26,7 +26,13 @@ n = len(data)
 N = 10000                                                                    #Number of draws
 nbin = 30
 
+plt.figure(figsize = (12,14))
+
+plt.hist(data, bins=10)
+plt.show()
+
 data_mean = np.mean(data)
+print(data_mean)
 
 draws = np.random.choice(data, replace=True, size = (N,n))                  #draw 10 samples with replacement 10,000 times
 
