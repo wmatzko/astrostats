@@ -46,6 +46,11 @@ percentile = np.percentile(delta, [2.5, 97.5])                              #Fin
 CI = (data_mean-percentile[1], data_mean - percentile[0])                   #Calculate CI
 print("The CI from the first method is ({0:0.3f}, {1:0.3f})\n".format(CI[0], CI[1]))
 
+# This is the method I was looking for. What you found is that
+# other methods give wider CIs. This is due to the heavy tails that you found
+# for the upper/lower bounds. It is great that you checked multiple methods.
+# Note that for larger n, I expect the methods to give similar results.
+
 #Apply second method using t-distribution
 t_arr = []                                                                  #hold 95% CIs
 
@@ -54,7 +59,7 @@ for i in range(len(xbars)):                                                 #Com
     s_el = s[i]
     el = t_interval(xb_el, s_el)
     t_arr.append(el)
-    
+
 lb_dist = [el[0] for el in t_arr]                                           #Make list of lower/upper bounds
 ub_dist = [el[1] for el in t_arr]
 
@@ -71,7 +76,6 @@ print("The 95% CI using SciPy is ({0:0.3f}, {1:0.3f})".format(sci_ci[0], sci_ci[
 
 lerr1,lmean,lerr2 = np.percentile(lb_dist, [16,50,84])                      #68% coverage of data; error estimate for upper/lower bounds
 uerr1,umean,uerr2 = np.percentile(ub_dist, [16,50,84])
-
 
 #make histogram of bootstrap data
 plt.figure(figsize = (12,14))
@@ -129,7 +133,7 @@ plt.show()
 
 
 
-    
+
 
 
 

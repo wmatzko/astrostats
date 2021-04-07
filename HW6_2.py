@@ -34,7 +34,7 @@ def t_interval(xbar, s):
     ubound = xbar+2.262 * s/ np.sqrt(ns)
     return (lbound, ubound)
 
-sample = np.random.normal(mu,sigma,(N,n))               #draw a sample of 10 numbers 
+sample = np.random.normal(mu,sigma,(N,n))               #draw a sample of 10 numbers
 
 sxbar = np.average(sample)                              #Compute sample average
 s = np.std(sample, ddof = 1)                            #Compute sample standard deviation
@@ -63,17 +63,19 @@ for i in range(nv):                                     #Compute 95% CI for z an
     s = verify_s[i]
     z_el = z_interval(xbar, sigma)
     t_el = t_interval(xbar, s)
-    
+
     z_arr.append(z_el)
     t_arr.append(t_el)
-    
+
 zcount = 0                                              #counter for number of z and t intervals containing mu
 tcount = 0
 
+# Good that you combined into one loop. Can also do using np.where (which
+# is a fn you made me aware of.)
 for i in range(nv):                                     #count how many intervals contain mu
     z_int = z_arr[i]
     t_int = t_arr[i]
-    
+
     if z_int[0] <= mu <= z_int[1]:
         zcount+=1
     if t_int[0] <= mu <= t_int[1]:
@@ -84,8 +86,10 @@ print("{0:0.3f}% of intervals contain mu in the z-distribution".format(zcount/10
 
 #make figure
 plt.figure(figsize = (12,14))
+# I moved subscripts b/c as written it could seem that xbar is different for
+# two cases.
 plt.title('95% Confidence Intervals for $\\overline{{X}}$  \
-$({0:0.3f} \leq \\overline{{X}}_z \leq {1:0.3f})$, $({2:0.3f} \leq \\overline{{x}}_t \leq {3:0.3f})$'\
+$({0:0.3f} \leq \\overline{{X}} \leq {1:0.3f})_z$, $({2:0.3f} \leq \\overline{{x}} \leq {3:0.3f})_t$'\
 .format(z_lbound, z_ubound, t_lbound, t_ubound),size = 20)
 
 bins = np.linspace(np.min(verify_xbar), np.max(verify_xbar), nbin+1)

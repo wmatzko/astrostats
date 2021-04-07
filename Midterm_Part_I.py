@@ -79,6 +79,14 @@ plt.plot(xval,yval, marker = 'o', linestyle = '', color = 'k', label = 'Full Dat
 plt.plot(xn,yn, marker = 'o', color = 'red', linestyle = '', markerfacecolor = 'none', markeredgewidth = 1,label = 'Selected Data')
 plt.plot(xval,y_fit_eval, marker = '', color = 'aqua', linestyle = '-', label = 'Best Fit Line')
 plt.fill_between(xval, b_low*xval + a_low, b_high*xval+a_high, label  = 'Bootstrap 95% CI', alpha = 0.5, color = 'teal')
+# This is a good idea for a plot, but the fact that for large x, more values
+# are in the green is misleading. I think a better way is to use blow, ahigh
+# and bhigh, alow to plot two extreme best fit lines that are within CI. In
+# this case, you won't be able to fill between, however. Another option is
+# to plot vertical error bars on the best-fit line. The fraction of points
+# between these error bars should be 95% and the fraction between should
+# not depend on x (b/c the error was independent of x).
+
 plt.xlabel('x', size = 18)
 plt.ylabel('y', size = 18)
 plt.grid()
@@ -94,8 +102,8 @@ plt.figure(figsize = (12,14))
 plt.title('Distribution of Slope',size = 24)
 bins= np.linspace(np.min(b_arr), np.max(b_arr), nbin+1)
 plt.hist(b_arr, bins = bins, color = 'k')
-plt.axvline(b_low, color = 'red', linestyle = '--')
-plt.axvline(b_med, color = 'red', linestyle = '-', label = '95% CI')
+plt.axvline(b_low, color = 'red', linestyle = '--', label = '95% CI')
+plt.axvline(b_med, color = 'red', linestyle = '-', label = 'average')
 plt.axvline(b_high, color = 'red', linestyle = '--')
 plt.xlabel('b',size = 18)
 plt.ylabel('Frequency', size = 18)
@@ -106,8 +114,8 @@ plt.figure(figsize = (12,14))
 plt.title('Distribution of Y-Intercept',size = 24)
 bins= np.linspace(np.min(a_arr), np.max(a_arr), nbin+1)
 plt.hist(a_arr, bins = bins, color = 'k')
-plt.axvline(a_low, color = 'red', linestyle = '--')
-plt.axvline(a_med, color = 'red', linestyle = '-', label = '95% CI')
+plt.axvline(a_low, color = 'red', linestyle = '--', label = '95% CI')
+plt.axvline(a_med, color = 'red', linestyle = '-', label = 'average')
 plt.axvline(a_high, color = 'red', linestyle = '--')
 plt.xlabel('a',size = 18)
 plt.ylabel('Frequency', size = 18)
@@ -138,7 +146,7 @@ a_err = t*np.sqrt(MSE) *np.sqrt(1/n + np.mean(xn)/ssq)
 
 a_CI = (my_a - a_err, my_a + a_err)
 
-print("The 95% CI on the slope from the t-test is ({0:0.5f}, {1:0.5f})".format(a_CI[0], a_CI[1]))
+print("The 95% CI on the intercept from the t-test is ({0:0.5f}, {1:0.5f})".format(a_CI[0], a_CI[1]))
 
 b_resid = a_arr-alpha
 a_resid = b_arr - beta
