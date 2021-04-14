@@ -30,6 +30,8 @@ def find_n(n0, beta_true, tol=1E-9, niter = 10000):
         #print(i,n,beta_exp)
         #beta_exp_arr.append(beta_exp)
         if (abs(beta_exp - beta_true) > tol) and (i < niter):
+                # This is fine; if speed was an issue, could use an
+                # optimization method.
                 n += (beta_exp-beta_true)/10 #crude way of updating n that seems to work for most cases
                 
         elif (abs(beta_exp - beta_true) <= tol) and (i <niter):
