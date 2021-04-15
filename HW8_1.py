@@ -26,6 +26,7 @@ def CI_est(f, a_min, b_max, step = 0.001, alpha = 0.05, tol = 0.001, brute = Fal
     Output:
         CI - The 100(1-alpha)% credible interval 
     '''
+    #f = lambda a, b: abs(a**3*(4-3*a) - b**3*(4-3*b) - (1-alpha))
     mid = np.average([a_min, b_max])
     if not brute:
         print("Finding CI with Dual Annealing")
