@@ -26,13 +26,20 @@ def CI_est(f, a_min, b_max, step = 0.001, alpha = 0.05, tol = 0.001, brute = Fal
     Output:
         CI - The 100(1-alpha)% credible interval 
     '''
+
     #f = lambda a, b: abs(a**3*(4-3*a) - b**3*(4-3*b) - (1-alpha))
     mid = np.average([a_min, b_max])
     if not brute:
         print("Finding CI with Dual Annealing")
         def F(X):
             a,b = X
-            return abs(quad(f, a, b)[0] - (1-alpha))
+            # You want minimum (b-a) for which integral = 0.95, but you were
+            # not accounting for the "minimum (b-a)" part. The following
+            # expresses an error function for the full statement of the CI.
+            # I'm certain this is not a great way to do it and
+            # that it won't work for certain pdfs, but it matches my brute force
+            # calculation.
+            return (b-a)*np.abs(quad(f, a, b)[0] - (1-alpha))
         
         bounds = [[a_min, mid], [mid, b_max]] #can make better bounds, more consistent reliable result
         res = dict()
