@@ -36,7 +36,7 @@ print(scipy.stats.t.sf(t, 6)*2, '!') #p-value using above t; my own addition
 t, p = scipy.stats.ttest_ind(x, y, equal_var=False) #calculate t-test for means of two samples x and y, assuming non-equal variances
 
 print(t) #scipy t-statistic; note it is the negative of the t-statistic above 
-print(p) #scipy p-value; ~22% chance of these data being from the same mean
+print(p) #scipy p-value; "~22% chance"***** of these data being from the same mean
 
 print(t*np.sqrt(a + b)) #+- confidence interval. 66% CI? See Devore page 358
 
