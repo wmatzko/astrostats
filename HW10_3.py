@@ -12,6 +12,7 @@ from scipy.stats import norm
 #set basic stuff
 #D = [0.5, 1.5]                  #data given in problem 
 D = np.random.normal(0.5,1,50)  #other data set to use
+
 sigma = 1                       #Gaussian sd, given in problem 
 ll,ul = -1,1                    #Lower and upper limits to do calculation on
 c = 1/(ul-ll)                   #from integrating p(theta)dtheta from ll to ul and making that equal to 1. 
@@ -20,6 +21,8 @@ g_sigma = 1                     #Gaussan sigma for prior belief
 
 iters = 10000                   #Number of MCMC iterations
 walkers = 3                     #Number of walkers
+mu0 = 0.5                       #Initial guess
+jump_width = 0.3                #Step size
 burnin = 100                   #Burnin period
 nbin = 20                       #number of bins to plot
 cc = True                       #Test for convergence?
@@ -219,7 +222,7 @@ post_arr = [post(i, D) for i in xvals] #plotting array for analytical post
 
 #now do mcmc to estimate the posterior 
 print("Performing MCMC with {0} iterations and {1} walkers\n".format(iters, walkers))
-iter_arr, chains, val= mcmc_sampler(data = D, mu0 = 0.5, prior = flat, iters = iters, walkers = walkers, burnin = burnin,\
+iter_arr, chains, val= mcmc_sampler(data = D, mu0 = mu0, prior = flat, iters = iters, walkers = walkers, jump_width = jump_width, burnin = burnin,\
                                     cc = cc, cc_min = cc_min, cc_test = cc_test)
 
 print("The mean value of the chains is {0:0.4f}\n".format(val))
