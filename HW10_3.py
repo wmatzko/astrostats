@@ -19,7 +19,7 @@ c = 1/(ul-ll)                   #from integrating p(theta)dtheta from ll to ul a
 g_mu = 0.5                      #Gaussian mu for prior belief
 g_sigma = 1                     #Gaussan sigma for prior belief
 
-iters = 10000                   #Number of MCMC iterations
+iters = 1000                   #Number of MCMC iterations
 walkers = 3                     #Number of walkers
 mu0 = 0.5                       #Initial guess
 jump_width = 0.3                #Step size
@@ -28,6 +28,12 @@ nbin = 20                       #number of bins to plot
 cc = True                       #Test for convergence?
 cc_min = 2000                   #Minimum iteration to start convergence test
 cc_test = 500                   #Test for convergence every n iterations
+
+
+# I wish that I could sit down with you for an hour or so to go over this.
+# You've done quite a bit of work and ideally I would provide more feedback.
+# As it is, I'm spending way too much time on going over code and need to 
+# catch up. But feel free to ask short and specific questions on Discord.
 
 #define useful functions
 def Gaussian(x, mu = g_mu, sigma = g_sigma):
@@ -48,6 +54,8 @@ def calc_posterior_analytical(data, x, mu_0, sigma_0):
     '''
     Shamelessly stolen for comparative purposes 
     '''
+    # As discussed in class, the prior assumed in the blog post was not
+    # relevant to this problem. 
     sigma = 1.
     n = len(data)
     mu_post = (mu_0 / sigma_0**2 + sum(data) / sigma**2) / (1. / sigma_0**2 + n / sigma**2)
