@@ -10,22 +10,35 @@ from scipy.stats import mode
 from matplotlib import pyplot as plt
 from scipy.stats import bayes_mvs
 import corner
+from scipy.stats import chi2
+from scipy.stats import rayleigh
+from scipy.stats import norm
+
 
 size = 50                       #number of data points in D
-prior_range = 1                 #+- uniform hard bound
+prior_range = [-1,1]             #-+ uniform hard bound
 
 #choose what distribution to draw from
-#D = np.random.rayleigh(0.5,size)
-#D = np.random.normal(0.5, 1,size)
-#D = np.random.uniform(-0.4,0.8, size)
-D = np.random.chisquare(1, size)
+
+dtype = 'normal' #options are normal, rayleigh, chi2
+
+if dtype == 'normal':
+    D = np.random.normal(0.5, 1,size)
+elif dtype == 'rayleigh':
+    D = np.random.rayleigh(0.5,size)
+elif dtype == 'chi2':
+    D = np.random.chisquare(3, size)
+else:
+    raise TypeError("Please choose a valid distribution")
+    
 
 print("The data are\n {0}\n".format(D))
+print("Data mean is {0:0.4f}\n".format(np.mean(D)))
 
 walker_verbose = True           #if True, print statistics on individual walkers
-nbin = 15
+nbin = 5                       #Number of bins in histograms
 
-nstep = 1e3                     # Number of steps each walker takes
+nstep = 1e4                    # Number of steps each walker takes
 nwalk = 10                      # Number of initial values for theta
 ndims = 1                       # Number of unknown parameters in theta vector
 
@@ -59,18 +72,25 @@ def autocorr_new(y, c=5.0):
 def log_LxP(theta, D):
     """Return Log( Likelihood * Posterior (prior?**) ) given data D."""
     p_arr = []
-    for d in D:
-        p = np.exp(-(theta-d)**2/2)
+    if (theta >= prior_range[0]) and (theta <= prior_range[1]):
+        if dtype == 'normal':
+            p = norm.pdf(D, theta)
+        elif dtype == 'rayleigh':
+            p = rayleigh.pdf(D, loc = 0, scale = theta)
+        elif dtype == 'chi2':
+            p = chi2.pdf(D,theta)
         p_arr.append(p)
-    if np.abs(theta) <= prior_range:
         LxP = np.prod(p_arr)
     else:
         LxP = 0.0
-    return np.log(LxP)
+    
+    if LxP == 0:
+        return -np.inf
+    else:
+        return np.log(LxP)
 
 # Create a set of 10 inital values for theta. Values are drawn from
-# a distribution that is unform in range [-1, 1] and zero outside.
-thetas_initial =  np.random.uniform(-prior_range, prior_range, (nwalk, ndims))
+thetas_initial =  np.random.uniform(prior_range[0], prior_range[1], (nwalk, ndims))
 
 # Initialize the sampler object
 sampler = emcee.EnsembleSampler(nwalk, ndims, log_LxP, args=(D, ))
@@ -86,17 +106,18 @@ ordered_samples = []                    #Reorganize chains so each list is one w
 
 print() #console readability
 
-if walker_verbose:
-    for i in range(nwalk):
-        el = samples[:,i,0]
-        el_mean = np.mean(el)
-        el_mode = mode(el)[0][0]
-        el_median = np.median(el)
-        el_ci = bayes_mvs(el)[0][1]
-        err = np.percentile(el, [2.5,97.5]) #95 percentile of data
-        std = np.std(el)
-        ordered_samples.append(el)
-        
+
+for i in range(nwalk):
+    el = samples[:,i,0]
+    el_mean = np.mean(el)
+    el_mode = mode(el)[0][0]
+    el_median = np.median(el)
+    el_ci = bayes_mvs(el)[0][1]
+    err = np.percentile(el, [2.5,97.5]) #95 percentile of data
+    std = np.std(el)
+    ordered_samples.append(el)
+    
+    if walker_verbose:
         print("Walker {0} mean is {1:0.3f}".format(i+1,el_mean))
         print("Walker {0} median is {1:0.3f}".format(i+1,el_median))
         print("Walker {0} mode is {1:0.3f}".format(i+1,el_mode))
@@ -126,7 +147,7 @@ for i in range(nwalk):
     ax = axes[i]
     ax.plot(samples[:,i,0], color = 'k')
     ax.set_xlim(0,nstep)
-    ax.set_ylim(-prior_range-0.1, prior_range+0.1)
+    ax.set_ylim(prior_range[0]-0.1, prior_range[1]+0.1)
     yl = ax.set_ylabel("Walker {0}".format(i+1))
     yl.set_rotation(0)
     ax.yaxis.set_label_coords(-0.06, 0.4)
