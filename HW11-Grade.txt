@@ -1,0 +1,3 @@
+Total: 10/10
+
+I wish that I had had time to cover the more advanced metrics for mcmc that you've explored.
