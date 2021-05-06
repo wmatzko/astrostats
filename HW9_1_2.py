@@ -54,6 +54,8 @@ mu_arr = np.ndarray.flatten(np.array(mu_arr))
 xdata = list(itertools.chain.from_iterable([x[:,0] for x in val_arr]))
 ydata = list(itertools.chain.from_iterable([x[:,1] for x in val_arr]))
 
+# Don't forget colorbar label.
+
 plt.figure(figsize = (12,14))
 plt.title('2D Histogram of Generated Data', size = 24)
 join = np.concatenate([xdata,ydata])
